@@ -3,7 +3,7 @@ Our team designs software for the Department of Homeland Security’s Next Gener
 
 Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. Additional difficulties include the curved shape of the vial and glare. Our team will custom train Tesseract’s neural network to recognize lot numbers and expiration dates in dot matrix font. Since no publicly available dataset exists, we are generating our own large dataset of dot-matrix fonts. 
 
-Created an initial dot matrix font dataset. The classes are 0-9, A-Z, Colon, Dash, Period, Slash.
+We created an initial dot matrix font dataset with classes are 0-9, A-Z, Colon, Dash, Period, Slash.
 The images were created by either deleting or perturbing a dot in a character. The number of images in each class, so far, are
 
 0: 520
