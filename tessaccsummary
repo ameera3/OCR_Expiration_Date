@@ -1,0 +1,56 @@
+#!/bin/sh
+# Copyright 2013 Nick White <nick.white@durham.ac.uk>
+#
+# Permission to use, copy, modify, and/or distribute this software for any
+# purpose with or without fee is hereby granted, provided that the above
+# copyright notice and this permission notice appear in all copies.
+
+usage="$0 [-w] imgdir traineddata
+
+  -w           test word accuracy, rather than character accuracy
+  imgdir       directory containing .png images with accompanying
+               .txt text files
+  traineddata  .traineddata file"
+
+if test "$1" = "-w"; then
+	accprog=wordacc
+	shift
+else
+	accprog=accuracy
+fi
+test $# -ne 2 && echo "Usage: $usage" && exit 1
+imgdir="$1"
+training="$2"
+
+# Copy training to temporary directory and point Tesseract to it
+lang=`basename "$training" | awk -F . '{print $1}'`
+t=`mkdir ./$lang`
+tessdatadir="./$lang"
+echo "$training"
+cp "$training" "$tessdatadir/$lang.traineddata"
+cp ./eng.traineddata "$tessdatadir/eng.traineddata"
+# tesseract seems to complain without a eng.traineddata file available
+#ln -s "$t/$lang.traineddata" "$t/eng.traineddata"
+
+sum=0
+n=0
+for i in `find "$imgdir" -type f -name '*.png' | sort`; do
+	b=`basename "$i" .png`
+	name=$(echo "$i" | sed -e 's/\.[^.]*$//') 
+	printf "%s: " "$b"
+	err=`tesseract "$i" "$tessdatadir/$b" --tessdata-dir $tessdatadir --oem 1 --psm 7 -l $lang 2>&1`
+	test $? -ne 0 && continue
+
+	acc=`ocrevalutf8 $accprog "$name-gt.txt" "$tessdatadir/$b.txt" \
+	     | awk '/Accuracy$/ {print $1; exit}' | sed 's/%//'`
+	n=`expr $n + 1`
+	sum=`echo $sum + $acc | bc -l`
+
+	printf "%.2f%%\n" "$acc"
+done
+
+if test $n -ne 0; then
+        avg=`echo $sum / $n | bc -l`
+        printf "$training - Average Accuracy: %.2f%%\n" "$avg"
+fi
+
