@@ -14,7 +14,7 @@ The code on Github has four major functions:
 
 Below, all the programs on Github are organized by their function:
 
-Creating and supporting the Tesseract ensemble
+## Creating and supporting the Tesseract ensemble
 
 Traineddata Files: There are four custom dot matrix traineddata files, 5x5_Dots_FT_500.traineddata, DotMatrix_FT_500.traineddata, Dotrice_FT_500.traineddata, dotOCRDData1.traineddata.  These .traineddata files were created by fine-tuning Tesseract’s neural network on the respective dot matrix fonts.  These are the four models used in the current Tesseract ensemble.
 
@@ -24,13 +24,13 @@ dot_training_text.txt -- The training data that is used to fine-tune Tesseract's
 
 Prepare_Training_Text.ipynb -- Used to create dot_training_text.txt
 
-Image-processing pipeline
+## Image-processing pipeline
 
 ocr_preprocess.py: This program does all the image processing that Tesseract desires such as rescaling, binarisation, deskewing, and removing alpha channel.
 
 ocr_preprocess_image.py: Does image processing for dark images when OTSU does not work so well.
 
-Testing framework
+## Testing framework
 
 GoogleAPI.py: Writes GoogleAPI OCR output to output directory as .txt files for images in input directory
 
@@ -49,7 +49,7 @@ tessaccsummary: Given a directory containing images and ground truth text files 
 
 ocr_confidences.py: Outputs average confidence of each model in Tesseract ensemble for each image
 
-Custom dot-matrix font dataset used to create the most successful model in the Tesseract ensemble
+## Custom dot-matrix font dataset used to create the most successful model in the Tesseract ensemble
 
 Dot_Matrix_Test_1: Contains a custom dataset for dot matrix fonts that was used to train dotOCRDData1.traineddata, the most successful model in the Tesseract ensemble.  This model was trained using ocrd-train, which is not the standard Tesseract training procedure.  The classes are 0-9, A-Z, Colon, Dash, Period, Slash. The images were created by either deleting or perturbing a dot in a character.
 
