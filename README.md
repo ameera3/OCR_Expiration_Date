@@ -1,7 +1,7 @@
 # Expiration_Date
 Our team designs software for the Department of Homeland Security’s Next Generation First Responder program.  When paramedics respond to a medical emergency, they ask the patient about any recent medications she has taken.  Since a patient’s medication influences which procedures or therapies will be administered, correctly recording and communicating the patient’s recent medication is crucial.  Our team is developing optical character recognition (OCR) software that can correctly read vital information from a photo of a medicine bottle, such as the medication’s name, the dose, the lot number and the expiration date.  
 
-Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. For example, the Google API achieves 60% character accuracy on dot matrix fonts. 
+Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. For example, Tesseract and the Google API achieve a 55% and 60% character accuracy respectively on dot matrix fonts. 
 
 To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed a novel way to ensemble OCR outputs. Our current ensemble consists of four models trained using Tesseract's LSTM neural network and achieves a 72.5% character accuracy on dot matrix fonts. Further improvement is expected.
 
