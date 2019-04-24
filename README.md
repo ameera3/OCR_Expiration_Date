@@ -3,7 +3,7 @@ Our team designs software for the Department of Homeland Security’s Next Gener
 
 Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. For example, the Google API achieves 60% character accuracy on dot matrix fonts. 
 
-To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed a novel way to ensemble OCR outputs. Our current ensemble consists of four models trained using Tesseract and achieves a 72.5% character accuracy on dot matrix fonts. Further improvement is expected.
+To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed a novel way to ensemble OCR outputs. Our current ensemble consists of four models trained using Tesseract's LSTM neural network and achieves a 72.5% character accuracy on dot matrix fonts. Further improvement is expected.
 
 The code on Github has four major functions:
 
