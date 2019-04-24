@@ -16,7 +16,7 @@ Below, all the programs on Github are organized by their function:
 
 ## Creating and supporting the Tesseract ensemble
 
-Traineddata Files: There are four custom dot matrix traineddata files, 5x5_Dots_FT_500.traineddata, DotMatrix_FT_500.traineddata, Dotrice_FT_500.traineddata, dotOCRDData1.traineddata.  These .traineddata files were created by fine-tuning Tesseract’s neural network on the respective dot matrix fonts.  These are the four models used in the current Tesseract ensemble.
+Traineddata Files: There are four custom dot matrix traineddata files, 5x5_Dots_FT_500.traineddata, DotMatrix_FT_500.traineddata, Dotrice_FT_500.traineddata, dotOCRDData1.traineddata.  These .traineddata files were created by fine-tuning Tesseract’s LSTM neural network on the respective dot matrix fonts.  These are the four models used in the current Tesseract ensemble.
 
 ocr.py: This program produces the Tesseract ensemble output from the four .traineddata files.
 
