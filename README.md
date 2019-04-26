@@ -5,7 +5,7 @@ Our experiments show that lot numbers and expiration dates are particularly diff
 
 To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed a novel way to ensemble OCR outputs. Our current ensemble consists of the Google Document Text Detection API and four models trained using Tesseract's LSTM neural network. We achieve over 85% character accuracy with 40 out of 75 test samples achieving perfect 100% character accuracy. Further improvement is expected.
 
-The code on Github has four major functions:
+The code on Github has five major functions:
 
 1. Creating and supporting the Google+Tesseract ensemble
 2. Reporting Results
