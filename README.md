@@ -8,10 +8,10 @@ To improve the character accuracy and to mitigate the wide variation in dot matr
 The code on Github has four major functions:
 
 1. Creating and supporting the Google+Tesseract ensemble
-2. Image-processing pipeline
-3. Testing framework
-4. Custom dot-matrix font dataset used to create the most successful model in the Tesseract ensemble
-5. Reporting Results
+2. Reporting Results
+3. Image-processing pipeline
+4. Testing framework
+5. Custom dot-matrix font dataset used to create the most successful model in the Tesseract ensemble
 
 Below, all the programs on Github are organized by their function:
 
@@ -27,6 +27,12 @@ dot_training_text.txt -- The training data that is used to fine-tune Tesseract's
 
 Prepare_Training_Text.ipynb -- Used to create dot_training_text.txt
 
+## Reporting Results
+
+Adding Google Document Text Detection to Ensemble -- The first column gives the results for Google Document Text Detection’s API with no image processing.  The second column gives the results of my Google + Tesseract ensemble with no image processing.  The third column gives the results for Google’s Document Text Detection API with my image processing.  The last column gives the results for my Google + Tesseract ensemble with my image processing. At the bottom, the average character accuracy as well as the number of perfectly OCRed samples are computed.  For the ensemble columns, a red percentage mean that the ensemble performed worse than Google on this example (compare with the column on the left).  Similarly, a green percentage in an ensemble column means that the ensemble performed better than Google on this example. 
+
+Comparison Google Text Detection versus Tesseract Ensemble -- The first column gives the results for the Google Text Detection API with no image processing. The second column gives the results of the Google Text Detection API with my image processing. The last column gives the results for my Tesseract ensemble with my image processing. At the bottom, the average character accuracy as well as the number of perfectly OCRed samples are computed. 
+
 ## Image-processing pipeline
 
 ocr_preprocess.py -- This program does all the image processing that Tesseract desires such as rescaling, binarisation, deskewing, and removing alpha channel.
@@ -39,6 +45,12 @@ GoogleAPI.py -- Writes Google Text Detection API OCR output to output directory 
 
 GoogleConfAPI.py -- Writes Google Document Text Detection API OCR output to output director as .txt files for images in input directory.
 
+ocr_confidences.py: Outputs average confidence of each model in Tesseract ensemble for each image
+
+myaccsummary.sh: Given a directory that contains ground truth text files as well as OCR output text files and images, outputs the average character accuracy.
+
+tessaccsummary: Given a directory containing images and ground truth text files as well as a .traineddata file, evaluates outputs the average character accuracy of the tesseract model.
+
 images.zip -- Contains 75 raw images of real dot matrix fonts in the wild along with their accompanying ground truth text files
 
 images_processed.zip -- Contains 75 processed images of real dot matrix fonts in the wild along with their accompanying ground truth text files. The images are the images from images.zip processed with ocr_preprocess.py and 
@@ -48,6 +60,8 @@ GplusTRaw.zip -- Contains the gplust_ensemble.py OCR outputs of the images in im
 
 GplusTProcessed.zip -- Contains the gplust_ensemble.py OCR output of the images in images_processed.zip as well as all the contents of images_processed.zip 
 
+TessProcessed.zip -- Contains the tesseract_ensemble.py OCR output of the images in images_processed.zip as well as all the contents of images_processed.zip
+
 GoogleRaw.zip -- Contains the Google Text Detection API OCR outputs of the images in images.zip as well as all the contents of images.zip
 
 GoogleProcessed.zip -- Contains the Google Text Detection API OCR outputs of the images in images_processed.zip as well as all the contents of images_process.zip
@@ -55,12 +69,6 @@ GoogleProcessed.zip -- Contains the Google Text Detection API OCR outputs of the
 GoogleDocRaw.zip -- Contains the Google Document Text Detection API OCR output of the images in images.zip as well as all the contents of images.zip
 
 GoogleDocProcessed.zip -- Contains the Google Document Text Detection API OCR output of the images in images_processed.zip as a well as all the content of images_processed.zip
-
-myaccsummary.sh: Given a directory that contains ground truth text files as well as OCR output text files, outputs the average character accuracy.
-
-tessaccsummary: Given a directory containing images and ground truth text files as well as a .traineddata file, evaluates outputs the average character accuracy of the tesseract model.
-
-ocr_confidences.py: Outputs average confidence of each model in Tesseract ensemble for each image
 
 ## Custom dot-matrix font dataset used to create the most successful model in the Tesseract ensemble
 
