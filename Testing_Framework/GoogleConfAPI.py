@@ -1,3 +1,5 @@
+#Usage: python GoogleConfAPI.py -i /home/images -o /home/output
+
 # import the necessary packages
 import io
 import argparse
