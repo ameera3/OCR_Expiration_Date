@@ -27,7 +27,7 @@ def detect_text(path):
     count = 0
     confidences = []
     numChars = []
-    avg_confidence = -1
+    avg_confidence = 0
     for page in document.pages:
         for block in page.blocks:
             for paragraph in block.paragraphs:
@@ -36,11 +36,12 @@ def detect_text(path):
                     word_text = ''.join([
                         symbol.text for symbol in word.symbols
                         ])
-                    if( count == 1 or Slash_Flag == 1 or word_text == "/" or word_text == "-" ):
+                    if( count == 1 or Slash_Flag == 1 or word_text == "/" or word_text == "-" 
+                            or word_text == ":" ):
                         transcripts = transcripts + word_text
                     else:
                         transcripts = transcripts + " " + word_text
-                    if( word_text == "/" or word_text == "-"):
+                    if( word_text == "/" or word_text == "-" or word_text == ":"):
                         Slash_Flag = 1;
                     else:
                         Slash_Flag = 0;
@@ -65,20 +66,28 @@ im_names = sorted(glob.glob(os.path.join(input_dir, '*.png')))
 # load the image as a PIL/Pillow image, apply OCR, and then delete
 # the temporary file
 
-langs = ['5x5_Dots_FT_500', 'dotOCRDData1', 'Dotrice_FT_500', 'DotMatrix_FT_500'] 
+langs = ['5x5_Dots_FT_500', 'dotOCRDData1', 'Dotrice_FT_500', 'DotMatrix_FT_500',
+         'DisplayDots_FT_500', 'LCDDot_FT_500', 'Orario_FT_500', 'Transit_FT_500'] 
 
 for im_name in im_names:
     file_name = os.path.basename(im_name).split('.')[0]
     file_name = file_name.split()[0]
     print(file_name)
     print('\n')
+    OCR_outputs = set()
+    OCR_map = {}
+    scores = []
     avg_confidences = []
     (G_text, G_avg_confidence) = detect_text(im_name)
+    OCR_outputs.add(G_text)
+    OCR_map[G_text] = [0]
     G_avg_confidence = 100*G_avg_confidence
     avg_confidences.append(G_avg_confidence)
+    scores.append(G_avg_confidence)
     for i in range(len(langs)):
-        data = pytesseract.image_to_data(Image.open(im_name), lang = langs[i], config='--psm 7', output_type=Output.DICT)
-        debug = pytesseract.image_to_data(Image.open(im_name), lang = langs[i], config='--psm 7')
+        data = pytesseract.image_to_data(Image.open(im_name), lang = langs[i], config='--psm 7', 
+                output_type=Output.DICT)
+        textString = pytesseract.image_to_string(Image.open(im_name), lang = langs[i], config='--psm 7')
         text = data['text']
         confidences = []
         numChars = []
@@ -91,13 +100,31 @@ for im_name in im_names:
         if confidences != []:
             avg_confidences.append(np.average(confidences, weights=numChars))
         else:
-            avg_confidences.append(-1)
+            avg_confidences.append(0)
+        if textString not in OCR_outputs:
+            OCR_outputs.add(textString)
+            OCR_map[textString] = [i+1]
+            scores.append(avg_confidences[i+1])
+        else:
+            scoreSum = avg_confidences[i+1]
+            for j in OCR_map[textString]:
+                scoreSum = scoreSum + avg_confidences[j]
+            for j in OCR_map[textString]:
+                scores[j] = scoreSum
+            OCR_map[textString].append(i+1)
+            scores.append(scoreSum)
     save_path = os.path.join(output_dir, file_name + ".txt")
-    best = avg_confidences.index(max(avg_confidences))
-    if best > 0:
-        text = pytesseract.image_to_string(Image.open(im_name), lang = langs[best-1], config='--psm 7')
+    best = scores.index(max(scores))
+    if G_avg_confidence > 85 or best == 0:
+        text = G_text    
     else:
-        text = G_text
+        text = pytesseract.image_to_string(Image.open(im_name), lang = langs[best-1], config='--psm 7')
+        count = 0
+        for c in text:
+            if ( (ord(c) >= 48 and ord(c) <= 57) or (ord(c) >= 65 and ord(c) <= 90) ):
+                count = count + 1        
+        if count/len(text) < 0.7:
+            text = ""
     f = open(save_path, "w")
     f.write(text)
     f.write('\n')
@@ -105,6 +132,8 @@ for im_name in im_names:
     print('\n')
     print(best)
     print('\n')
-    print(avg_confidences[best])
+    print(scores[best])
     print('\n')
-
+    for key,val in OCR_map.items():
+        print(key, "=>", val)
+    print('\n')

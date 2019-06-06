@@ -1,6 +1,4 @@
-# Usage: python ocr_confidences.py -i /home/images
-# Outputs the average confidence of each model in the ensemble on each image
-# You must have all .traineddata files in your tessdata directory
+# Usage: python3 ocr_confidences.py -i /home/images 
 # import the necessary packages
 from PIL import Image
 import pytesseract
@@ -23,14 +21,17 @@ im_names = sorted(glob.glob(os.path.join(input_dir, '*.png')))
 # load the image as a PIL/Pillow image, apply OCR, and then delete
 # the temporary file
 
-langs = ['5x5_Dots_FT_500', 'Dot_Matrix_FT_500', 'dotOCRDData1'] 
+langs = ['5x5_Dots_FT_500', 'dotOCRDData1', 'Dotrice_FT_500', 'DotMatrix_FT_500',
+         'DisplayDots_FT_500', 'LCDDot_FT_500', 'Orario_FT_500', 'Transit_FT_500'] 
 
 for i in range(len(langs)):
+    print('\n' + langs[i])
     for im_name in im_names:
         file_name = os.path.basename(im_name).split('.')[0]
         file_name = file_name.split()[0]
         print(file_name + ': ', end='')
-        data = pytesseract.image_to_data(Image.open(im_name), lang = langs[i], config='--psm 7', output_type=Output.DICT)
+        data = pytesseract.image_to_data(Image.open(im_name), lang = langs[i], config='--psm 7', 
+                output_type=Output.DICT)
         text = data['text']
         confidences = []
         numChars = []
@@ -45,7 +46,4 @@ for i in range(len(langs)):
         else:
             print('0.00')
 
-# show the output images
-#cv2.imshow("Image", image)
-#cv2.imshow("Output", gray)
-#cv2.waitKey(0)
+
