@@ -19,6 +19,8 @@ Below, all the programs on Github are organized by their function:
 
 ## Creating and supporting the Google+Tesseract ensemble
 
+User Manual -- Start here if you intend to run the programs in this repository. Provides suggestions for programs to install before running the programs in this repository. Command line instructions to run each program are found at the top of each program in the repository.
+
 Traineddata Files -- There are eight custom dot matrix traineddata files. These .traineddata files were created by fine-tuning Tesseract’s LSTM neural network on the respective dot matrix fonts.  These are the eight models used in the current Tesseract ensemble.
 
 gplust_ensemble.py -- This program produces the Google+Tesseract ensemble output from the Google Document Text Detection API and our eight .traineddata files.
