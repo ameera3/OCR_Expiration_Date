@@ -5,7 +5,7 @@ The paramedic looks in your medicine cabinet and finds a vial of medication. Cor
 
 Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. For example, Tesseract and the Google Text Detection API achieve a 55% and 60% character accuracy, respectively, on dot matrix fonts. 
 
-To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed an image processing pipeline as well as a novel way to ensemble OCR outputs. Our current ensemble consists of the Google Document Text Detection API and eight models trained using Tesseract's LSTM neural network. We achieve 87% character accuracy with 41 out of 75 test samples achieving perfect 100% character accuracy. Our ensemble's character accuracy is an 8% improvement on that of the Google Document Text Detection API.
+To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed an image processing pipeline as well as a novel way to ensemble OCR outputs. Our current ensemble consists of the Google Document Text Detection API and eight models trained using Tesseract's LSTM neural network. We achieve 87% character accuracy with 41 out of 75 test samples achieving perfect 100% character accuracy. Moreover, for 54 of the 75 test examples, the intended information can be extracted without error from the ensemble's outputs. Our ensemble's character accuracy is an 8% improvement on that of the Google Document Text Detection API.
 
 The code on Github has five major functions:
 
@@ -30,6 +30,12 @@ dot_training_text.txt -- The training data that is used to fine-tune Tesseract's
 Prepare_Training_Text.ipynb -- Used to create dot_training_text.txt
 
 ## Reporting Results
+
+**The Good** -- Illustrates the 54 out of 75 test examples for which it is possible to extract the intended information without error from the ensemble's output.
+
+**The Mostly OK** -- Illustrates the 14 out of 75 test examples for which it is possible to extract the intended information with minor errors from the ensemble's output.
+
+**The Bad and The Ugly** -- Illustrates the 7 out of 75 test examples for which it is not possible to extract the intended information from the ensemble's output.
 
 **Adding Google Document Text Detection to Ensemble** -- The first column gives the results for Google Document Text Detection’s API with no image processing. The second column gives the results for Google’s Document Text Detection API with my image processing. Observe that my image processing increases the average character accuracy by over 6%. 
 
