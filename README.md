@@ -1,9 +1,11 @@
 # Expiration_Date
-Our team designs software for the Department of Homeland Security’s Next Generation First Responder program.  When paramedics respond to a medical emergency, they ask the patient about any recent medications she has taken.  Since a patient’s medication influences which procedures or therapies will be administered, correctly recording and communicating the patient’s recent medication is crucial.  Our team is developing optical character recognition (OCR) software that can correctly read vital information from a photo of a medicine bottle, such as the medication’s name, the dose, the lot number and the expiration date.  
+Our team designs software for the Department of Homeland Security’s Next Generation First Responder program. Imagine that you have had a heart attack. The paramedics that treat you need to know which medications you are currently taking, as this will influence which procedures or therapies will be administered. However, you are incapacitated and cannot tell them. 
 
-Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. For example, Tesseract and the Google Text Detection API achieve a 55% and 60% character accuracy respectively on dot matrix fonts. 
+The paramedic looks in your medicine cabinet and finds a vial of medication. Correctly recording and quickly communicating your medication to everyone on the medical team is crucial.  Our team is developing optical character recognition (OCR) software that can correctly read vital information from a photo of a medicine bottle, such as the medication’s name, the dose, the lot number and the expiration date.  
 
-To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed a novel way to ensemble OCR outputs. Our current ensemble consists of the Google Document Text Detection API and four models trained using Tesseract's LSTM neural network. We achieve over 85% character accuracy with 40 out of 75 test samples achieving perfect 100% character accuracy. Further improvement is expected.
+Our experiments show that lot numbers and expiration dates are particularly difficult for off-the-shelf OCR engines, such as Tesseract, to read because they are usually written in a dot-matrix font that varies widely from product to product. For example, Tesseract and the Google Text Detection API achieve a 55% and 60% character accuracy, respectively, on dot matrix fonts. 
+
+To improve the character accuracy and to mitigate the wide variation in dot matrix fonts, we have developed an image processing pipeline as well as a novel way to ensemble OCR outputs. Our current ensemble consists of the Google Document Text Detection API and eight models trained using Tesseract's LSTM neural network. We achieve 87% character accuracy with 41 out of 75 test samples achieving perfect 100% character accuracy. Our ensemble's character accuracy is an 8% improvement on that of the Google Document Text Detection API.
 
 The code on Github has five major functions:
 
@@ -17,21 +19,43 @@ Below, all the programs on Github are organized by their function:
 
 ## Creating and supporting the Google+Tesseract ensemble
 
-Traineddata Files -- There are four custom dot matrix traineddata files, 5x5_Dots_FT_500.traineddata, DotMatrix_FT_500.traineddata, Dotrice_FT_500.traineddata, dotOCRDData1.traineddata.  These .traineddata files were created by fine-tuning Tesseract’s LSTM neural network on the respective dot matrix fonts.  These are the four models used in the current Tesseract ensemble.
+Traineddata Files -- There are eight custom dot matrix traineddata files. These .traineddata files were created by fine-tuning Tesseract’s LSTM neural network on the respective dot matrix fonts.  These are the eight models used in the current Tesseract ensemble.
 
-gplust_ensemble.py -- This program produces the Google+Tesseract ensemble output from the Google Document Text Detection API and our four .traineddata files.
+gplust_ensemble.py -- This program produces the Google+Tesseract ensemble output from the Google Document Text Detection API and our eight .traineddata files.
 
-tesseract_ensemble.py -- This program produces the Tesseract ensemble output from the four .traineddata files.
+tesseract_ensemble.py -- This program produces the Tesseract ensemble output from the eight .traineddata files.
 
-dot_training_text.txt -- The training data that is used to fine-tune Tesseract's neural network to the four dot matrix fonts.
+dot_training_text.txt -- The training data that is used to fine-tune Tesseract's neural network to the eight dot matrix fonts.
 
 Prepare_Training_Text.ipynb -- Used to create dot_training_text.txt
 
 ## Reporting Results
 
-Adding Google Document Text Detection to Ensemble -- The first column gives the results for Google Document Text Detection’s API with no image processing.  The second column gives the results of my Google + Tesseract ensemble with no image processing.  The third column gives the results for Google’s Document Text Detection API with my image processing.  The last column gives the results for my Google + Tesseract ensemble with my image processing. At the bottom, the average character accuracy as well as the number of perfectly OCRed samples are computed.  For the ensemble columns, a red percentage mean that the ensemble performed worse than Google on this example (compare with the column on the left).  Similarly, a green percentage in an ensemble column means that the ensemble performed better than Google on this example. 
+**Adding Google Document Text Detection to Ensemble** -- The first column gives the results for Google Document Text Detection’s API with no image processing. The second column gives the results for Google’s Document Text Detection API with my image processing. Observe that my image processing increases the average character accuracy by over 6%. 
 
-Comparison Google Text Detection versus Tesseract Ensemble -- The first column gives the results for the Google Text Detection API with no image processing. The second column gives the results of the Google Text Detection API with my image processing. The last column gives the results for my Tesseract ensemble with my image processing. At the bottom, the average character accuracy as well as the number of perfectly OCRed samples are computed. 
+The third column gives the results of my Google + Tesseract ensemble with no image processing. Comparing with the second column, we see that the Google + Tesseract ensemble's character accuracy is a 4% improvement on that of the Google Document Text Detection API on the raw images. 
+
+The last column gives the results for my Google + Tesseract ensemble with my image processing. Comparing with the third column, we see that my image processing increases the average accuracy of the Google + Tesseract ensemble by over 10%. Comparing with the second column, we see that the Google + Tesseract character accuracy ensemble outperforms that of the Google Document Text Detection API by 8% on the processed images.   
+
+At the bottom, the average character accuracy for all the models as well as the number of perfectly OCRed samples are computed.  
+
+**Ensemble Accuracy** -- Each column gives the accuracy of the corresponding model on each of the 75 test images. Considering the first column, we see that Tesseract, without any training, has a 55% character accuracy on the test set. Comparing the third through tenth columns with the first, we see that fine-tuning Tesseract on dot matrix fonts increases the character accuracy to 65-70%. The second column shows that the Google Document Text Detection API has an average character accuracy of 79% on the test set. 
+
+The eleventh column reveals that, by ensembing the Google Document Text Detection API with the eight fine-tuned Tesseract models, we can achieve an average character accuracy of 87% on the test set. The twelfth column shows that the best possible character accuracy that could theoretically have been achieved by such an ensemble is 89%. The thirteenth column shows how many of the models achieved the best possible accuracy. 
+
+The eleventh column is also color-coded to highlight its performance on each example. A dark blue accuracy means that the ensemble achieved the unique best accuracy on that example. A light blue accuracy means that the ensemble achieved the best possible accuracy on that example, but the best accuracy was not unique. An orange accuracy means that the ensemble achieved an accuracy strictly between the best and the worst possible accuracies. A red accuracy means that the ensemble chose the worse possible accuracy.
+
+At the bottom, the average character accuracy for all the models as well as the number of perfectly OCRed samples are computed.  
+
+**Comparison Google Text Detection versus Tesseract Ensemble** -- The first column gives the results for the Google Text Detection API with no image processing. The second column gives the results for the pure Tesseract ensemble with no image processing. Comparing the first and second columns, we see that the pure Tesseract ensemble's character accuracy outperforms that of the Google Text Detection API by 12% on the raw images. 
+
+The third column gives the results of the Google Text Detection API with my image processing. Comparing with the first column, we see that my image processing increases the average character accuracy by 6%. 
+
+The last column gives the results for the pure Tesseract ensemble with my image processing. Comparing with the third column, we see that the pure Tesseract ensemble's character accuracy outperforms that of the Google Text Detection API by 9% on the processed images. Comparing with the second column, we see that my image processing increases the average character accuracy by 3%.   
+
+At the bottom, the average character accuracy as well as the number of perfectly OCRed samples are computed.
+
+**Average Confidence** -- Each column gives the confidence of the corresponding model on each of the 75 test images. At the bottom, the average confidence across all 75 test examples are computed for all the models.
 
 ## Image-processing pipeline
 
@@ -43,9 +67,9 @@ ocr_preprocess_image.py -- Does image processing for dark images when OTSU does 
 
 GoogleAPI.py -- Writes Google Text Detection API OCR output to output directory as .txt files for images in input directory
 
-GoogleConfAPI.py -- Writes Google Document Text Detection API OCR output to output director as .txt files for images in input directory.
+GoogleDocAPI.py -- Writes Google Document Text Detection API OCR output to output director as .txt files for images in input directory.
 
-ocr_confidences.py: Outputs average confidence of each model in Tesseract ensemble for each image
+ocr_confidences.py: Outputs average confidence of each model in Tesseract ensemble for each image.
 
 myaccsummary.sh: Given a directory that contains ground truth text files as well as OCR output text files and images, outputs the average character accuracy.
 
@@ -61,6 +85,8 @@ GplusTRaw.zip -- Contains the gplust_ensemble.py OCR outputs of the images in im
 GplusTProcessed.zip -- Contains the gplust_ensemble.py OCR output of the images in images_processed.zip as well as all the contents of images_processed.zip 
 
 TessProcessed.zip -- Contains the tesseract_ensemble.py OCR output of the images in images_processed.zip as well as all the contents of images_processed.zip
+
+TessRaw.zip -- Contains the tesseract_ensemble.py OCR outputs of the images in images.zip as well as all the contents of images.zip
 
 GoogleRaw.zip -- Contains the Google Text Detection API OCR outputs of the images in images.zip as well as all the contents of images.zip
 
