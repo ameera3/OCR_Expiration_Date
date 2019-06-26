@@ -1,4 +1,4 @@
-# Usage: python gplust_ensemble.py -i /home/images -o /home/output
+# Usage: python3 gplust_ensemble.py -i /home/images -o /home/output
 # import the necessary packages
 from PIL import Image
 import pytesseract
@@ -127,7 +127,9 @@ for im_name in im_names:
             text = ""
     f = open(save_path, "w")
     f.write(text)
-    f.write('\n')
+    if text != "":
+        f.write('\n')
+    f.close()    
     print(text)
     print('\n')
     print(best)
