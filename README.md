@@ -6,6 +6,8 @@ This software may be subject to U.S. export control laws. By accepting this soft
 
 ## Introduction
 
+For a detailed introduction, see the [Slides](../master/OCRDotMatrix.pdf)
+
 Our team designs software for the Department of Homeland Security’s Next Generation First Responder program. Imagine that you have had a heart attack. The paramedics that treat you need to know which medications you are currently taking, as this will influence which procedures or therapies they will administer. However, you are incapacitated and cannot tell them. 
 
 The paramedic looks in your medicine cabinet and finds a vial of medication. Correctly recording and quickly communicating your medication to everyone on the medical team is crucial.  Our team is developing optical character recognition (OCR) software that can correctly read vital information from a photo of a medicine bottle, such as the medication’s name, the dose, the lot number and the expiration date.  
