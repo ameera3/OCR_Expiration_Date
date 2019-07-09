@@ -6,7 +6,7 @@ This software may be subject to U.S. export control laws. By accepting this soft
 
 ## Introduction
 
-For a detailed introduction, see the [Slides](../master/OCRDotMatrix.pdf)
+For a detailed introduction, see the [Slides](../master/OCRDotMatrix.pdf).
 
 Our team designs software for the Department of Homeland Security’s Next Generation First Responder program. Imagine that you have had a heart attack. The paramedics that treat you need to know which medications you are currently taking, as this will influence which procedures or therapies they will administer. However, you are incapacitated and cannot tell them. 
 
